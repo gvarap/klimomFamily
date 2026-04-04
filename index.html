@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Family Milk Calculator | Klimom</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family:
+                    "Inter",
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    sans-serif;
+                background: #fafafa;
+                color: #2d2d2d;
+                line-height: 1.6;
+                padding: 20px;
+                min-height: 100vh;
+            }
+
+            .container {
+                max-width: 480px;
+                margin: 0 auto;
+            }
+
+            .card {
+                background: white;
+                border-radius: 16px;
+                padding: 32px 24px;
+                box-shadow:
+                    0 2px 8px rgba(0, 0, 0, 0.08),
+                    0 0 0 1px rgba(0, 0, 0, 0.04);
+                margin-bottom: 20px;
+            }
+
+            .header {
+                text-align: center;
+                margin-bottom: 32px;
+            }
+
+            .logo {
+                font-size: 28px;
+                font-weight: 700;
+                color: #2d8659;
+                margin-bottom: 8px;
+            }
+
+            h1 {
+                font-size: 24px;
+                font-weight: 700;
+                color: #1a1a1a;
+                margin-bottom: 8px;
+                line-height: 1.3;
+            }
+
+            .subtitle {
+                font-size: 15px;
+                color: #666;
+                font-weight: 400;
+            }
+
+            .form-group {
+                margin-bottom: 24px;
+            }
+
+            label {
+                display: block;
+                font-size: 14px;
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 8px;
+            }
+
+            input,
+            select {
+                width: 100%;
+                padding: 14px 16px;
+                font-size: 16px;
+                border: 1.5px solid #e0e0e0;
+                border-radius: 10px;
+                background: #fafafa;
+                color: #2d2d2d;
+                transition: all 0.2s;
+                font-family: inherit;
+            }
+
+            input:focus,
+            select:focus {
+                outline: none;
+                border-color: #2d8659;
+                background: white;
+                box-shadow: 0 0 0 3px rgba(45, 134, 89, 0.1);
+            }
+
+            .btn {
+                width: 100%;
+                padding: 16px;
+                font-size: 16px;
+                font-weight: 600;
+                border: none;
+                border-radius: 12px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                font-family: inherit;
+                text-decoration: none;
+                display: inline-block;
+                text-align: center;
+            }
+
+            .btn-primary {
+                background: #2d8659;
+                color: white;
+            }
+
+            .btn-primary:hover {
+                background: #246f48;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(45, 134, 89, 0.3);
+            }
+
+            .btn-primary:active {
+                transform: translateY(0);
+            }
+
+            .btn-whatsapp {
+                background: #25d366;
+                color: white;
+                margin-top: 16px;
+            }
+
+            .btn-whatsapp:hover {
+                background: #1faa52;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+            }
+
+            .btn-whatsapp::before {
+                content: "💬 ";
+                margin-right: 6px;
+            }
+
+            .results {
+                background: linear-gradient(135deg, #f0f9f4 0%, #e8f5ee 100%);
+                border-radius: 12px;
+                padding: 24px;
+                margin-top: 24px;
+                border: 2px solid #d1ead8;
+            }
+
+            .result-title {
+                font-size: 18px;
+                font-weight: 700;
+                color: #1a5738;
+                margin-bottom: 16px;
+                text-align: center;
+            }
+
+            .result-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 0;
+                border-bottom: 1px solid #d1ead8;
+            }
+
+            .result-row:last-child {
+                border-bottom: none;
+            }
+
+            .result-label {
+                font-size: 15px;
+                color: #2d5f42;
+                font-weight: 500;
+            }
+
+            .result-value {
+                font-size: 18px;
+                font-weight: 700;
+                color: #1a5738;
+            }
+
+            .plan-badge {
+                background: #2d8659;
+                color: white;
+                padding: 8px 16px;
+                border-radius: 20px;
+                font-size: 14px;
+                font-weight: 600;
+                display: inline-block;
+                margin-top: 16px;
+            }
+
+            .tooltip {
+                position: relative;
+                display: inline-block;
+                margin-left: 6px;
+                cursor: help;
+            }
+
+            .tooltip-icon {
+                width: 18px;
+                height: 18px;
+                background: #2d8659;
+                color: white;
+                border-radius: 50%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+                font-weight: 700;
+            }
+
+            .tooltip-text {
+                visibility: hidden;
+                width: 260px;
+                background-color: #1a5738;
+                color: #fff;
+                text-align: center;
+                border-radius: 8px;
+                padding: 12px;
+                position: absolute;
+                z-index: 1;
+                bottom: 125%;
+                left: 50%;
+                margin-left: -130px;
+                font-size: 13px;
+                line-height: 1.4;
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+
+            .tooltip:hover .tooltip-text {
+                visibility: visible;
+                opacity: 1;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            .microcopy {
+                text-align: center;
+                font-size: 13px;
+                color: #999;
+                margin-top: 12px;
+            }
+
+            .error {
+                color: #d32f2f;
+                font-size: 13px;
+                margin-top: 6px;
+            }
+
+            @media (max-width: 480px) {
+                .card {
+                    padding: 24px 20px;
+                }
+
+                h1 {
+                    font-size: 22px;
+                }
+
+                .tooltip-text {
+                    width: 220px;
+                    margin-left: -110px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <!-- Lead Capture Form -->
+            <div id="leadForm" class="card">
+                <div class="header">
+                    <div class="logo">Klimom</div>
+                    <h1>Family Milk Calculator</h1>
+                    <p class="subtitle">
+                        Calculate your family's daily milk needs
+                    </p>
+                </div>
+
+                <form id="leadCaptureForm">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            required
+                            placeholder="Enter your name"
+                            data-testid="lead-name-input"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input
+                            type="tel"
+                            id="phone"
+                            required
+                            pattern="[0-9]{10}"
+                            placeholder="10-digit mobile number"
+                            data-testid="lead-phone-input"
+                        />
+                        <div id="phoneError" class="error hidden">
+                            Please enter a valid 10-digit phone number
+                        </div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        data-testid="lead-submit-button"
+                    >
+                        Continue to Calculator
+                    </button>
+                    <p class="microcopy">
+                        Takes 10 seconds • No commitment required
+                    </p>
+                </form>
+            </div>
+
+            <!-- Calculator -->
+            <div id="calculator" class="card hidden">
+                <div class="header">
+                    <div class="logo">Klimom</div>
+                    <h1>Family Milk Calculator</h1>
+                </div>
+
+                <div class="form-group">
+                    <label for="adults">Number of Adults</label>
+                    <input
+                        type="number"
+                        id="adults"
+                        min="0"
+                        value="2"
+                        data-testid="adults-input"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="kids">Number of Kids</label>
+                    <input
+                        type="number"
+                        id="kids"
+                        min="0"
+                        value="2"
+                        data-testid="kids-input"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="consumption"
+                        >Daily Milk per Person (Liters)</label
+                    >
+                    <input
+                        type="number"
+                        id="consumption"
+                        min="0.1"
+                        step="0.1"
+                        value="0.25"
+                        data-testid="consumption-input"
+                    />
+                </div>
+
+                <div id="results" class="results" data-testid="results-section">
+                    <div class="result-title">
+                        Your Family's Milk Requirement
+                    </div>
+
+                    <div class="result-row">
+                        <span class="result-label">Daily</span>
+                        <span
+                            class="result-value"
+                            id="dailyResult"
+                            data-testid="daily-result"
+                            >1.0 L</span
+                        >
+                    </div>
+
+                    <div class="result-row">
+                        <span class="result-label">Weekly</span>
+                        <span
+                            class="result-value"
+                            id="weeklyResult"
+                            data-testid="weekly-result"
+                            >7.0 L</span
+                        >
+                    </div>
+
+                    <div class="result-row">
+                        <span class="result-label">Monthly</span>
+                        <span
+                            class="result-value"
+                            id="monthlyResult"
+                            data-testid="monthly-result"
+                            >30.0 L</span
+                        >
+                    </div>
+
+                    <div style="text-align: center">
+                        <span
+                            class="plan-badge"
+                            id="planBadge"
+                            data-testid="plan-badge"
+                            >Medium Plan</span
+                        >
+                        <span class="tooltip">
+                            <span class="tooltip-icon">?</span>
+                            <span class="tooltip-text"
+                                >Subscription plans help ensure uninterrupted
+                                daily delivery based on your family's
+                                needs.</span
+                            >
+                        </span>
+                    </div>
+                </div>
+
+                <a
+                    href="#"
+                    id="whatsappBtn"
+                    class="btn btn-whatsapp"
+                    target="_blank"
+                    data-testid="whatsapp-button"
+                    >Start Daily Delivery</a
+                >
+            </div>
+        </div>
+
+        <script>
+            // Configuration - REPLACE THIS URL WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
+            const GOOGLE_SCRIPT_URL =
+                "https://script.google.com/macros/s/AKfycbwY7JsSQD6SxOQhhTAcA-w6aUuQkeR6uqVnyAb8twa2jKwO6m4pVDUTh5EQRhA2jJX8uQ/exec";
+            const WHATSAPP_BASE_URL =
+                "https://api.whatsapp.com/send/?phone=919100741305";
+
+            // Lead capture
+            document
+                .getElementById("leadCaptureForm")
+                .addEventListener("submit", async (e) => {
+                    e.preventDefault();
+
+                    const name = document.getElementById("name").value.trim();
+                    const phone = document.getElementById("phone").value.trim();
+                    const phoneError = document.getElementById("phoneError");
+
+                    // Validate phone
+                    if (!/^[0-9]{10}$/.test(phone)) {
+                        phoneError.classList.remove("hidden");
+                        return;
+                    }
+                    phoneError.classList.add("hidden");
+
+                    // Send to Google Sheets
+                    try {
+                        await fetch(GOOGLE_SCRIPT_URL, {
+                            method: "POST",
+                            mode: "no-cors",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                name: name,
+                                phone: phone,
+                                calculatorType: "Family Milk Calculator",
+                            }),
+                        });
+
+                        // Store in localStorage for WhatsApp message
+                        localStorage.setItem("userName", name);
+                        localStorage.setItem("userPhone", phone);
+
+                        // Show calculator
+                        document
+                            .getElementById("leadForm")
+                            .classList.add("hidden");
+                        document
+                            .getElementById("calculator")
+                            .classList.remove("hidden");
+
+                        // Calculate initial values
+                        calculateMilk();
+                    } catch (error) {
+                        console.error("Error:", error);
+                        // Still show calculator even if submission fails
+                        document
+                            .getElementById("leadForm")
+                            .classList.add("hidden");
+                        document
+                            .getElementById("calculator")
+                            .classList.remove("hidden");
+                        calculateMilk();
+                    }
+                });
+
+            // Calculator logic
+            function calculateMilk() {
+                const adults =
+                    parseInt(document.getElementById("adults").value) || 0;
+                const kids =
+                    parseInt(document.getElementById("kids").value) || 0;
+                const consumption =
+                    parseFloat(document.getElementById("consumption").value) ||
+                    0;
+
+                const daily = (adults + kids) * consumption;
+                const weekly = daily * 7;
+                const monthly = daily * 30;
+
+                document.getElementById("dailyResult").textContent =
+                    daily.toFixed(1) + " L";
+                document.getElementById("weeklyResult").textContent =
+                    weekly.toFixed(1) + " L";
+                document.getElementById("monthlyResult").textContent =
+                    monthly.toFixed(1) + " L";
+
+                // Determine plan
+                let plan = "";
+                if (daily < 1) {
+                    plan = "Small Plan";
+                } else if (daily >= 1 && daily <= 3) {
+                    plan = "Medium Plan";
+                } else {
+                    plan = "Large Plan";
+                }
+                document.getElementById("planBadge").textContent = plan;
+
+                // Update WhatsApp link
+                updateWhatsAppLink(daily, weekly, monthly, plan);
+            }
+
+            function updateWhatsAppLink(daily, weekly, monthly, plan) {
+                const name = localStorage.getItem("userName") || "there";
+                const message = `Hi, I'm ${name}. I used your Family Milk Calculator and my family needs ${daily.toFixed(1)}L daily (${monthly.toFixed(1)}L/month). Suggested: ${plan}. I'd like to know more about A2 milk delivery.`;
+                const encodedMessage = encodeURIComponent(message);
+                document.getElementById("whatsappBtn").href =
+                    `${WHATSAPP_BASE_URL}&text=${encodedMessage}`;
+            }
+
+            // Real-time calculation
+            document
+                .getElementById("adults")
+                .addEventListener("input", calculateMilk);
+            document
+                .getElementById("kids")
+                .addEventListener("input", calculateMilk);
+            document
+                .getElementById("consumption")
+                .addEventListener("input", calculateMilk);
+        </script>
+    </body>
+</html>
